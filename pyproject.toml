@@ -1,0 +1,18 @@
+[tool]
+[tool.pdm]
+
+[project]
+name = ""
+version = ""
+description = ""
+authors = [
+    {name = "netrix", email = "netrix89@gmail.com"},
+]
+dependencies = [
+    "fastapi[all]>=0.95.1",
+]
+requires-python = ">=3.10"
+license = {text = "MIT"}
+
+[tool.pdm.scripts]
+start = "uvicorn l2dkp.main:app --host 0.0.0.0 --port 8080"
