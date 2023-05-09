@@ -9,7 +9,7 @@ authors = [
     {name = "netrix", email = "netrix89@gmail.com"},
 ]
 dependencies = [
-    "fastapi[all]>=0.95.1",
+    "flask>=2.3.2",
 ]
 requires-python = ">=3.10"
 license = {text = "MIT"}
