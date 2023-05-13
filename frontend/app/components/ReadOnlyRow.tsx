@@ -9,11 +9,12 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import { Dayjs } from "dayjs";
 
 
 export function createData(
     name: string,
-    date: Date,
+    date: Dayjs,
     people: Array<string>,
     drops: Array<string>,
   ) {
@@ -34,7 +35,7 @@ export function ReadOnlyRow(props: { row: ReturnType<typeof createData> }) {
       <React.Fragment>
         <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
           <TableCell component="th" scope="row">
-            {row.date.toLocaleDateString()}
+            {row.date.format()}
           </TableCell>
           <TableCell align="left">{row.name}</TableCell>
           <TableCell align="right">{row.drops.length}</TableCell>

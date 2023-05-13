@@ -1,12 +1,8 @@
 'use client'
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
 
 import IconButton from '@mui/material/IconButton';
-
-import Typography from '@mui/material/Typography';
-
 import Drawer from '@mui/material/Drawer';
 import Divider from '@mui/material/Divider';
 
@@ -17,9 +13,6 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import RaidsTable from './components/RaidsTable';
 import AppBar from './components/AppBar';
 import Menu from './components/Menu';
-import Button from '@mui/material/Button';
-import AddIcon from '@mui/icons-material/Add';
-import { purple } from '@mui/material/colors';
 
 
 const drawerWidth = 240;
@@ -111,33 +104,7 @@ export default function Home() {
                 justifyContent: 'center',
               }}
             >
-              <Paper
-                elevation={1}
-                sx={{
-                  width: "60%",
-                }}
-              >
-                <Box
-                  sx={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    padding: 2,
-                  }}
-                >
-                  <Typography variant="h6" gutterBottom component="div">
-                      Raids
-                  </Typography>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    startIcon={<AddIcon />}
-                  >
-                      Add
-                  </Button>
-                </Box>
-                <RaidsTable />
-              </Paper>
+              <RaidsTable />
             </Box>
           </Main>
         </Box>

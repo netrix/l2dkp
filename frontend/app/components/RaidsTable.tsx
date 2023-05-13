@@ -1,6 +1,8 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import AddIcon from '@mui/icons-material/Add';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -8,11 +10,11 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import {createData, ReadOnlyRow} from "./ReadOnlyRow";
-import EditableRow from "./EditableRow";
+import dayjs from "dayjs";
+import dynamic from 'next/dynamic';
+const EditableRow = dynamic(() => import("./EditableRow"), {ssr: false});
 
 const theme = createTheme({
   components: {
@@ -32,7 +34,7 @@ const theme = createTheme({
 const rows = [
   createData(
     "Baium",
-    new Date(),
+    dayjs('2018-04-04T16:00:00.000Z'),
     [
       "DarkNetrix",
       "NetrixDSS",
@@ -44,7 +46,7 @@ const rows = [
   ),
   createData(
     "Valakas",
-    new Date(),
+    dayjs('2018-04-04T16:00:00.000Z'),
     [
       "Sheldon",
       "NetrixDSS",
@@ -59,8 +61,39 @@ const rows = [
 
 
 export default function RaidsTable() {
-    return (
-        <TableContainer component={Paper}>
+  const [isAddMode, setAddMode] = React.useState(false);
+
+  return (
+    <Paper
+      elevation={1}
+      sx={{
+        width: "60%",
+      }}
+    >
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          padding: 2,
+        }}
+      >
+        <Typography variant="h6" gutterBottom component="div">
+            Raids
+        </Typography>
+        {
+          !isAddMode &&
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<AddIcon />}
+            onClick={() => setAddMode(true)}
+          >
+              Add
+          </Button>
+        }
+      </Box>
+      <TableContainer component={Paper}>
           <Table aria-label="collapsible table">
             <ThemeProvider theme={theme}>
               <TableHead>
@@ -74,12 +107,22 @@ export default function RaidsTable() {
               </TableHead>
             </ThemeProvider>
             <TableBody>
-              <EditableRow />
+              {
+                isAddMode &&
+                <EditableRow
+                  onAccept={(raidInfo) => {
+                    console.log(raidInfo);
+                    setAddMode(false);
+                  }}
+                  onCancel={() => setAddMode(false)}
+                />
+              }
               {rows.map((row) => (
                 <ReadOnlyRow key={row.name} row={row} />
               ))}
             </TableBody>
           </Table>
         </TableContainer>
-    );
-};
+    </Paper>
+  );
+}

@@ -11,10 +11,13 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import TextField from '@mui/material/TextField';
+import DoneIcon from '@mui/icons-material/Done';
+import CloseIcon from '@mui/icons-material/Close';
+import dayjs, { Dayjs } from 'dayjs';
 
 
 interface RaidDatePickerProps {
-    value: Date;
+    value: Dayjs;
     onChange: (newValue: number) => void;
 }
 
@@ -32,7 +35,7 @@ function RaidDatePicker({value, onChange}: RaidDatePickerProps) {
 
 
 interface RaidInfo {
-    date: Date;
+    date: Dayjs;
     name: string;
     drops: Array<string>;
     people: Array<string>;
@@ -41,7 +44,7 @@ interface RaidInfo {
 
 function createNewRaidInfo()  {
     return {
-        date: new Date(),
+        date: dayjs(),
         name: "",
         drops: [],
         people: [],
@@ -49,8 +52,118 @@ function createNewRaidInfo()  {
 }
 
 
+interface NameListEditRowProps {
+    initName: string;
+    forbiddenNames: Array<string>;
+    onConfirm: (name: string) => void;
+    onCancel: () => void;
+}
+
+
+function NameListEditRow({initName, forbiddenNames, onConfirm, onCancel}: NameListEditRowProps) {
+    const [name, setName] = React.useState(initName);
+    const [isForbidden, setForbidden] = React.useState(false);
+
+    function onAccept() {
+        if (name && !isForbidden) {
+            onConfirm(name);
+        }
+    }
+
+    return (
+        <>
+            <TextField
+                autoFocus
+                defaultValue={initName}
+                error={isForbidden}
+                onChange={(event) => {
+                    const newName = event.target.value;
+                    setName(newName);
+                    setForbidden(forbiddenNames.includes(newName));
+                }}
+                onKeyPress= {(e) => {
+                    if (e.key === 'Enter') {
+                        onAccept();
+                    }
+                }}
+             />
+            <Button
+                variant="contained"
+                onClick={onAccept}
+            >
+                <DoneIcon />
+            </Button>
+            <Button
+                variant="contained"
+                color="error"
+                onClick={() => {
+                    onCancel();
+                }}
+            >
+                <CloseIcon />
+            </Button>
+        </>
+    )
+}
+
+
+interface NameListProps {
+    names: Array<string>
+    onChange: (names: Array<string>) => void
+}
+
+
+function NameList({names, onChange}: NameListProps) {
+    const [isEditMode, setEditMode] = React.useState(false);
+
+    function getAddButtonItem() {
+        return (
+            <ListItem>
+                <Button
+                        variant="contained"
+                        color="primary"
+                        startIcon={<AddIcon />}
+                        onClick={() => {
+                            setEditMode(true);
+                        }}
+                    >
+                        Add
+                </Button>
+            </ListItem>
+        )
+    }
+
+    function getEditItem() {
+        return (
+            <ListItem>
+                <NameListEditRow
+                    initName=""
+                    forbiddenNames={names}
+                    onConfirm={(newName) => {
+                        onChange(names.concat(newName));
+                        setEditMode(false);
+                    }}
+                    onCancel={() => setEditMode(false)}
+                />
+            </ListItem>
+        )
+    }
+
+    return (
+        <List>
+            {names.map((name) => (<ListItem key={name}>{name}</ListItem>))}
+            {
+                isEditMode ? getEditItem() : getAddButtonItem()
+            }
+        </List>
+    )
+}
+
+
 interface EditableRowProps {
     raidInfo?: RaidInfo;
+    onAccept: (info: RaidInfo) => void;
+    onCancel: () => void;
 }
 
 
@@ -63,11 +176,18 @@ export default function EditableRow(props: EditableRowProps) {
             <TableCell component="th" scope="row" align="left">
                 <RaidDatePicker
                     value={raidInfo.date}
-                    onChange={(newValue) => {}}
+                    onChange={(newValue) => {
+                        setRaidInfo({...raidInfo, date: newValue});
+                    }}
                  />
             </TableCell>
             <TableCell align="left">
-                <TextField id="outlined-basic" label="Raid name" variant="outlined" />
+                <TextField
+                    id="outlined-basic"
+                    label="Raid name"
+                    variant="outlined"
+                    onChange={(event) => {setRaidInfo({...raidInfo, name: event.target.value});}}
+                />
             </TableCell>
             <TableCell align="right">{raidInfo.drops.length}</TableCell>
             <TableCell align="right">{raidInfo.people.length}</TableCell>
@@ -78,33 +198,21 @@ export default function EditableRow(props: EditableRowProps) {
                 <Typography variant="h6" gutterBottom component="div">
                 Drops
                 </Typography>
-                <List>
-                {raidInfo.drops.map((drop) => (<ListItem key={drop}>{drop}</ListItem>))}
-                <ListItem>
-                    <Button
-                            variant="contained"
-                            color="primary"
-                            startIcon={<AddIcon />}
-                        >
-                            Add
-                    </Button>
-                </ListItem>
-                </List>
+                <NameList
+                    names={raidInfo.drops}
+                    onChange={(newNames) => {
+                        setRaidInfo({...raidInfo, drops: newNames})
+                    }}
+                />
                 <Typography variant="h6" gutterBottom component="div">
                 People
                 </Typography>
-                <List>
-                {raidInfo.people.map((person) => (<ListItem key={person}>{person}</ListItem>))}
-                </List>
-                <ListItem>
-                    <Button
-                            variant="contained"
-                            color="primary"
-                            startIcon={<AddIcon />}
-                        >
-                            Add
-                    </Button>
-                </ListItem>
+                <NameList
+                    names={raidInfo.people}
+                    onChange={(newNames) => {
+                        setRaidInfo({...raidInfo, people: newNames})
+                    }}
+                />
             </Box>
             <Box
                 sx={{
@@ -116,12 +224,14 @@ export default function EditableRow(props: EditableRowProps) {
                 <Button
                     variant="contained"
                     color="error"
+                    onClick={() => props.onCancel()}
                     >
                     Cancel
                 </Button>
                 <Button
                     variant="contained"
                     color="primary"
+                    onClick={() => {props.onAccept(raidInfo)}}
                     >
                     Add
                 </Button>
