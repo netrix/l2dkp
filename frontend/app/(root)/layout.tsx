@@ -1,4 +1,5 @@
 'use client'
+
 import * as React from 'react';
 import Box from '@mui/material/Box';
 
@@ -10,7 +11,6 @@ import { styled, useTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import RaidsTable from './components/RaidsTable';
 import AppBar from './components/AppBar';
 import Menu from './components/Menu';
 
@@ -47,14 +47,11 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 
-export default function Home() {
-  const [state, setState] = React.useState({
-    top: false,
-    left: false,
-    bottom: false,
-    right: false,
-  });
-
+export default function MainLayout({
+  children,
+}: {
+  children: React.ReactNode,
+}) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
 
@@ -104,7 +101,7 @@ export default function Home() {
                 justifyContent: 'center',
               }}
             >
-              <RaidsTable />
+              {children}
             </Box>
           </Main>
         </Box>
