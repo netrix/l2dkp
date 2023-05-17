@@ -15,6 +15,7 @@ import TextField from '@mui/material/TextField';
 import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
 import dayjs, { Dayjs } from 'dayjs';
+import {RaidInfo} from "./types";
 
 
 interface RaidDatePickerProps {
@@ -35,7 +36,8 @@ function RaidDatePicker({value, onChange}: RaidDatePickerProps) {
 }
 
 
-export interface RaidInfo {
+// TODO create value object with conversion methods
+interface InternalRaidInfo {
     date: Dayjs;
     name: string;
     drops: Array<string>;
@@ -43,13 +45,22 @@ export interface RaidInfo {
 }
 
 
-function createNewRaidInfo()  {
+function createInternalRaidInfo(raidInfo?: RaidInfo): InternalRaidInfo  {
     return {
-        date: dayjs(),
-        name: "",
-        drops: [],
-        people: [],
+        date: dayjs(raidInfo?.date),
+        name: raidInfo?.date || "",
+        drops: raidInfo?.drops || [],
+        people: raidInfo?.people || [],
     };
+}
+
+function toRaidInfo(internalRaidInfo: InternalRaidInfo): RaidInfo {
+    return {
+        date: internalRaidInfo.date.format(),      // TODO make sure it's saved as UTC
+        name: internalRaidInfo.name,
+        drops: internalRaidInfo.drops,
+        people: internalRaidInfo.people,
+    }
 }
 
 
@@ -169,7 +180,7 @@ interface EditableRowProps {
 
 
 export default function EditableRow(props: EditableRowProps) {
-    const [raidInfo, setRaidInfo] = React.useState(props.raidInfo || createNewRaidInfo());
+    const [raidInfo, setRaidInfo] = React.useState(createInternalRaidInfo(props.raidInfo));
 
     return (
         <React.Fragment>
@@ -232,7 +243,7 @@ export default function EditableRow(props: EditableRowProps) {
                 <Button
                     variant="contained"
                     color="primary"
-                    onClick={() => {props.onAccept(raidInfo)}}
+                    onClick={() => {props.onAccept(toRaidInfo(raidInfo))}}
                     >
                     Add
                 </Button>

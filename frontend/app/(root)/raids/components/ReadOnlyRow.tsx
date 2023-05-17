@@ -9,37 +9,22 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { Dayjs } from "dayjs";
+import {RaidInfo} from "./types";
 
 
-export function createData(
-    name: string,
-    date: Dayjs,
-    people: Array<string>,
-    drops: Array<string>,
-  ) {
-    return {
-      name,
-      date,
-      people,
-      drops,
-    };
-  }
-
-
-export function ReadOnlyRow(props: { row: ReturnType<typeof createData> }) {
-    const { row } = props;
+export default function ReadOnlyRow({raidInfo}: { raidInfo: RaidInfo }) {
     const [open, setOpen] = React.useState(false);
 
     return (
       <React.Fragment>
         <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
           <TableCell component="th" scope="row">
-            {row.date.format()}
+            {/* TODO use import { Dayjs } from "dayjs"; to provide correct date in UI*/}
+            {raidInfo.date}
           </TableCell>
-          <TableCell align="left">{row.name}</TableCell>
-          <TableCell align="right">{row.drops.length}</TableCell>
-          <TableCell align="right">{row.people.length}</TableCell>
+          <TableCell align="left">{raidInfo.name}</TableCell>
+          <TableCell align="right">{raidInfo.drops.length}</TableCell>
+          <TableCell align="right">{raidInfo.people.length}</TableCell>
           <TableCell>
             <IconButton
               aria-label="expand row"
@@ -58,13 +43,13 @@ export function ReadOnlyRow(props: { row: ReturnType<typeof createData> }) {
                   Drops
                 </Typography>
                 <List>
-                  {row.drops.map((drop) => (<ListItem key={drop}>{drop}</ListItem>))}
+                  {raidInfo.drops.map((drop) => (<ListItem key={drop}>{drop}</ListItem>))}
                 </List>
                 <Typography variant="h6" gutterBottom component="div">
                   People
                 </Typography>
                 <List>
-                  {row.people.map((person) => (<ListItem key={person}>{person}</ListItem>))}
+                  {raidInfo.people.map((person) => (<ListItem key={person}>{person}</ListItem>))}
                 </List>
               </Box>
             </Collapse>

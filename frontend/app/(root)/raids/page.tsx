@@ -12,9 +12,10 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
-import { createData, ReadOnlyRow } from "./components/ReadOnlyRow";
-import dayjs from "dayjs";
-import EditableRow, {RaidInfo} from "./components/EditableRow";
+import ReadOnlyRow from "./components/ReadOnlyRow";
+import { useGetRaidsQuery } from '@/redux/services/raidsApi';
+import EditableRow from "./components/EditableRow";
+import {RaidInfo} from "./components/types";
 
 const theme = createTheme({
   components: {
@@ -27,34 +28,6 @@ const theme = createTheme({
     }
   },
 });
-
-
-const rows = [
-  createData(
-    "Baium",
-    dayjs('2018-04-04T16:00:00.000Z'),
-    [
-      "DarkNetrix",
-      "NetrixDSS",
-    ],
-    [
-      "Majestic Robe",
-      "Majestic Gauntlets"
-    ]
-  ),
-  createData(
-    "Valakas",
-    dayjs('2018-04-04T16:00:00.000Z'),
-    [
-      "Sheldon",
-      "NetrixDSS",
-    ],
-    [
-      "Nightmare Robe",
-      "Nightmare Gauntlets"
-    ]
-  )
-];
 
 
 interface RaidsPageHeaderProps {
@@ -119,7 +92,7 @@ interface RaidsTableBodyProps {
 
 function RaidsTableBody({raids, isAddMode, onRaidEditAccept, onRaidEditCancel}: RaidsTableBodyProps) {
   return (
-    <TableBody>
+    <>
       {
         isAddMode &&
         <EditableRow
@@ -128,15 +101,38 @@ function RaidsTableBody({raids, isAddMode, onRaidEditAccept, onRaidEditCancel}: 
         />
       }
       {raids.map((row) => (
-        <ReadOnlyRow key={row.name} row={row} />
+        <ReadOnlyRow key={row.name} raidInfo={row} />
       ))}
-    </TableBody>
+    </>
+  )
+}
+
+
+function RaidsTableBodyError({message}: {message: string}) {
+  return (
+    <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
+      <TableCell scope="row" align="left">
+        <p>Oh no, there was an error {message}</p>
+      </TableCell>
+    </TableRow>
+  );
+}
+
+
+function RaidsTableBodyLoading() {
+  return (
+    <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
+      <TableCell scope="row" align="left">
+        <p>Loading...</p>
+      </TableCell>
+    </TableRow>
   )
 }
 
 
 export default function Home() {
   const [isAddMode, setAddMode] = React.useState(false);
+  const { isLoading, isFetching, data, error } = useGetRaidsQuery(null);
 
   return (
     <Paper
@@ -146,21 +142,31 @@ export default function Home() {
       }}
     >
       <RaidsPageHeader
-        showAddButton={!isAddMode}
+        showAddButton={!isAddMode && !isLoading && !isLoading && !error}
         onAddButtonClick={() => setAddMode(true)}
       />
       <TableContainer component={Paper}>
         <Table aria-label="collapsible table">
           <RaidsTableHead />
-          <RaidsTableBody
-            raids={rows}
-            isAddMode={isAddMode}
-            onRaidEditAccept={(raidInfo) => {
-              console.log(raidInfo);
-              setAddMode(false);
-            }}
-            onRaidEditCancel={() => setAddMode(false)}
-          />
+          <TableBody>
+            {
+              error ? (
+                <RaidsTableBodyError message={JSON.stringify(error)} />
+              ) : isLoading || isFetching ? (
+                <RaidsTableBodyLoading />
+              ) : data ? (
+                <RaidsTableBody
+                  raids={data}
+                  isAddMode={isAddMode}
+                  onRaidEditAccept={(raidInfo) => {
+                    console.log(raidInfo);
+                    setAddMode(false);
+                  }}
+                  onRaidEditCancel={() => setAddMode(false)}
+                />
+              ) : null
+            }
+          </TableBody>
         </Table>
       </TableContainer>
     </Paper>
