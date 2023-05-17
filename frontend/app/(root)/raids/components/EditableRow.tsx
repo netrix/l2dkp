@@ -35,7 +35,7 @@ function RaidDatePicker({value, onChange}: RaidDatePickerProps) {
 }
 
 
-interface RaidInfo {
+export interface RaidInfo {
     date: Dayjs;
     name: string;
     drops: Array<string>;
