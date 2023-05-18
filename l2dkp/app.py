@@ -1,3 +1,4 @@
+import pathlib
 from flask import Flask, request, make_response
 
 
@@ -26,11 +27,17 @@ def after_request_func(response):
 ### end CORS section
 
 
-@app.route('/', defaults={'path': ''})
-@app.route('/static/', defaults={'path': ''})
-@app.route('/static/<path:path>')
+@app.route('/', defaults={'path': 'index.html'})
+@app.route('/app/', defaults={'path': 'index.html'})
+@app.route('/app/<path:path>')
 def catch_all(path):
-    return app.send_static_file("index.html")
+    static_folder_path = pathlib.Path(app.static_folder)
+    static_path = static_folder_path / path
+
+    if static_path.is_file():
+        return app.send_static_file(path)
+    else:
+        return app.send_static_file(path + ".html")
 
 
 @app.route('/api/raids')
