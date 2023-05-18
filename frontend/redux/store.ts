@@ -9,7 +9,7 @@ export const store = configureStore({
     [raidsApi.reducerPath]: raidsApi.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({}).concat([raidsApi.middleware]),
-  // devTools: process.env.NODE_ENV !== "production",
+  devTools: process.env.NODE_ENV !== "production",
 });
 
 setupListeners(store.dispatch);

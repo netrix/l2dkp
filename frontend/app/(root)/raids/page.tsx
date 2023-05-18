@@ -13,7 +13,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import ReadOnlyRow from "./components/ReadOnlyRow";
-import { useGetRaidsQuery } from '@/redux/services/raidsApi';
+import { useGetRaidsQuery, useAddNewRaidMutation } from '@/redux/services/raidsApi';
 import EditableRow from "./components/EditableRow";
 import {RaidInfo} from "./components/types";
 
@@ -132,7 +132,19 @@ function RaidsTableBodyLoading() {
 
 export default function Home() {
   const [isAddMode, setAddMode] = React.useState(false);
+  const [addNewRaid, response] = useAddNewRaidMutation();
+
   const { isLoading, isFetching, data, error } = useGetRaidsQuery(null);
+
+  function onRaidEditAccept(raidInfo: RaidInfo) {
+    addNewRaid(raidInfo)
+      .unwrap()
+      .then(() => {})
+      .then((error: any) => {
+        console.log("addNewRaid:", error);
+      });
+    setAddMode(false);
+  }
 
   return (
     <Paper
@@ -158,10 +170,7 @@ export default function Home() {
                 <RaidsTableBody
                   raids={data}
                   isAddMode={isAddMode}
-                  onRaidEditAccept={(raidInfo) => {
-                    console.log(raidInfo);
-                    setAddMode(false);
-                  }}
+                  onRaidEditAccept={onRaidEditAccept}
                   onRaidEditCancel={() => setAddMode(false)}
                 />
               ) : null
