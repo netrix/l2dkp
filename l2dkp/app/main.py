@@ -48,7 +48,7 @@ def create_app(config_class: Type[Any] = Config) -> Flask:
     # Extensions
 
     # Blueprints
-    app.register_blueprint(v1_blueprint, url_prefix="/api")
+    app.register_blueprint(v1_blueprint, url_prefix="/api/v1")
 
     return app
 
