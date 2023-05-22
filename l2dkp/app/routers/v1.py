@@ -19,7 +19,7 @@ class RaidInfo(BaseModel):
     @validator("people", "drops", each_item=True)
     def check_person_name_must_not_be_empty_string(cls, value: str) -> str:
         if len(value) < 1:
-            raise ValueError("empty name")       # TODO better desc
+            raise ValueError("empty name")  # TODO better desc
         return value
 
     @classmethod
@@ -37,27 +37,25 @@ class RaidsResponse(BaseModel):
 
     @classmethod
     def from_db_raids(cls, raids: list[DbRaidInfo]) -> "RaidsResponse":
-        return cls(
-            raids=[RaidInfo.from_db_raid(raid_info) for raid_info in raids]
-        )
+        return cls(raids=[RaidInfo.from_db_raid(raid_info) for raid_info in raids])
 
 
-@blueprint.route('/raids')
+@blueprint.route("/raids")
 @validate()
 def get_raids() -> RaidsResponse:
     raids = DbRaidInfo.query.all()
     return RaidsResponse.from_db_raids(raids)
 
 
-
-@blueprint.route('/raids', methods=["POST"])
+@blueprint.route("/raids", methods=["POST"])
 @validate()
 def add_raid(body: RaidInfo) -> None:
-    new_raid = DbRaidInfo(name=body.name,
-                          date=datetime.fromisoformat(body.date),
-                          people=[DbPerson(name=name) for name in body.people],
-                          drops=[DbItem(name=name) for name in body.drops],
-                          )
+    new_raid = DbRaidInfo(
+        name=body.name,
+        date=datetime.fromisoformat(body.date),
+        people=[DbPerson(name=name) for name in body.people],
+        drops=[DbItem(name=name) for name in body.drops],
+    )
 
     db.session.add(new_raid)
     db.session.commit()

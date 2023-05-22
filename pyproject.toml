@@ -17,6 +17,14 @@ dependencies = [
 requires-python = ">=3.10"
 license = {text = "MIT"}
 
+[tool.pdm.dev-dependencies]
+dev = [
+    "black>=23.3.0",
+]
+
 [tool.pdm.scripts]
 start = "flask --app l2dkp.app.main run --debug"
 init_db = {call = "l2dkp.app.main:init_db"}
+
+[tool.black]
+line-length = 100
