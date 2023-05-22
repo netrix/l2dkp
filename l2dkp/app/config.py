@@ -1,7 +1,6 @@
 import os
 import pathlib
 
-
 BASE_DIR = pathlib.Path(__file__).parent
 SQLITE_DB_PATH = BASE_DIR / "local.db"
 SQLITE_DB_URI = f"sqlite:///{SQLITE_DB_PATH.as_posix()}"

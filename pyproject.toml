@@ -20,6 +20,7 @@ license = {text = "MIT"}
 [tool.pdm.dev-dependencies]
 dev = [
     "black>=23.3.0",
+    "isort>=5.12.0",
 ]
 
 [tool.pdm.scripts]
@@ -28,3 +29,7 @@ init_db = {call = "l2dkp.app.main:init_db"}
 
 [tool.black]
 line-length = 100
+
+[tool.isort]
+profile = "black"
+line_length = 100

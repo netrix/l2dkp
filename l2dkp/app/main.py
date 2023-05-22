@@ -1,10 +1,11 @@
 import pathlib
-from flask import Flask, request, make_response
+from typing import Any, Type
+
+from flask import Flask, make_response, request
 
 from .config import Config
-from .routers.v1 import blueprint as v1_blueprint
 from .extensions import db
-from typing import Type, Any
+from .routers.v1 import blueprint as v1_blueprint
 
 
 # TODO Flask automatically detects this method as an entrypoint
