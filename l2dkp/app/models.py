@@ -26,7 +26,7 @@ class Person(db.Model):
     __tablename__ = "person"
 
     id: Mapped[int] = db.Column(db.Integer, primary_key=True)
-    name: Mapped[str] = db.Column(db.String, unique=True, nullable=False)   # TODO forbid empty strings!!
+    name: Mapped[str] = db.Column(db.String(16), unique=True, nullable=False)   # TODO forbid empty strings!!
 
     raids: Mapped[list["Raid"]] = db.relationship(secondary=person_raid_association_table, back_populates="people")
 
@@ -41,7 +41,7 @@ class Item(db.Model):
     __tablename__ = "item"
 
     id: Mapped[int] = db.Column(db.Integer, primary_key=True)
-    name: Mapped[str] = db.Column(db.String, unique=True, nullable=False)
+    name: Mapped[str] = db.Column(db.String(128), unique=True, nullable=False)
 
     raids: Mapped[list["Raid"]] = db.relationship(secondary=item_raid_association_table, back_populates="drops")
 
@@ -50,7 +50,7 @@ class Raid(db.Model):
     __tablename__ = "raid"
 
     id: Mapped[int] = db.Column(db.Integer, primary_key=True)
-    name: Mapped[str] = db.Column(db.String, unique=False, nullable=False)
+    name: Mapped[str] = db.Column(db.String(128), unique=False, nullable=False)
     date: Mapped[datetime] = db.Column(db.DateTime, unique=False, nullable=False) # TODO translation datetime.datetime
 
     people: Mapped[list[Person]] = db.relationship(secondary=person_raid_association_table, back_populates="raids")
