@@ -13,7 +13,7 @@ def create_app(config_class: Type[Any] = Config) -> Flask:
     app = Flask(__name__)
     app.config.from_object(config_class)
 
-    ### CORS section    # TODO temporary?
+    # *** CORS section ***    # TODO temporary?
     @app.after_request
     def after_request_func(response):
         origin = request.headers.get("Origin")
@@ -57,7 +57,7 @@ def create_app(config_class: Type[Any] = Config) -> Flask:
 
 
 def init_db():
-    from . import models
+    from . import models  # noqa F401 - models must be loaded for db.create_all()
 
     app = create_app()
 
