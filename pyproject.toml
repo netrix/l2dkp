@@ -18,4 +18,4 @@ license = {text = "MIT"}
 
 [tool.pdm.scripts]
 start = "flask --app l2dkp.app.main run --debug"
-
+init_db = {call = "l2dkp.app.main:init_db"}

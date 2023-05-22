@@ -3,6 +3,7 @@ from flask import Flask, request, make_response
 
 from .config import Config
 from .routers.v1 import blueprint as v1_blueprint
+from .extensions import db
 from typing import Type, Any
 
 
@@ -46,10 +47,27 @@ def create_app(config_class: Type[Any] = Config) -> Flask:
             return app.send_static_file(path + ".html")
 
     # Extensions
+    db.init_app(app)
 
     # Blueprints
     app.register_blueprint(v1_blueprint, url_prefix="/api/v1")
 
     return app
 
+
+def init_db():
+    from . import models
+
+    app = create_app()
+
+    with app.app_context():
+        db.create_all()
+
+    # db.drop_all()
+    # TODO add migration function too
+
+
+    # with app.
 # TODO should I use `start.env = {FLASK_ENV = "development"}` or it's always development
+
+
