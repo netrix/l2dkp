@@ -9,6 +9,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
+import Link from 'next/link';
 
 
 import { setAuthState } from "@/redux/features/authSlice";
@@ -22,28 +23,51 @@ export default function Menu() {
     return (
         <>
             <List>
-            {['Raids', 'Members'].map((text, index) => (
-                <ListItem key={text} disablePadding>
-                <ListItemButton>
-                    <ListItemIcon>
-                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                    </ListItemIcon>
-                    <ListItemText primary={text} />
-                </ListItemButton>
+            {[
+                {
+                    title: 'Raids',
+                    link: "/raids"
+                },
+                {
+                    title: 'Members',
+                    link: "/members"
+                }
+            ].map(({title, link}, index) => (
+                <ListItem key={title} disablePadding>
+                    <Link
+                        href={link}
+                        passHref
+                        legacyBehavior
+                    >
+                        <ListItemButton>
+                            <ListItemIcon>
+                            {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                            </ListItemIcon>
+                            <ListItemText primary={title} />
+                        </ListItemButton>
+                    </Link>
                 </ListItem>
             ))}
             </List>
             <Divider />
             <List>
                 <ListItem key={"login"} disablePadding>
-                    <ListItemButton
-                        onClick={() => dispatch(setAuthState(!isAuthenticated))}
+                    <Link
+                        href={"/auth/signin"}
+                        passHref
+                        legacyBehavior
                     >
-                        <ListItemIcon>
-                        <InboxIcon />
-                        </ListItemIcon>
-                        <ListItemText primary={isAuthenticated ? "Log out" : "Log in"} />
-                    </ListItemButton>
+                        <ListItemButton
+                            // onClick={() => dispatch(setAuthState(!isAuthenticated))}
+                            // onClick={useRouter.replace("/auth")}
+                        >
+                            <ListItemIcon>
+                            <InboxIcon />
+                            </ListItemIcon>
+                            {/* TODO change to 2 buttons - "Profile" and "Log out" when authenticated */}
+                            <ListItemText primary={isAuthenticated ? "Log out" : "Log in"} />
+                        </ListItemButton>
+                    </Link>
                 </ListItem>
             </List>
         </>
