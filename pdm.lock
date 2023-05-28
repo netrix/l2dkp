@@ -94,6 +94,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "flask-login"
+version = "0.6.2"
+requires_python = ">=3.7"
+summary = "User authentication and session management for Flask."
+dependencies = [
+    "Flask>=1.0.4",
+    "Werkzeug>=1.0.1",
+]
+
+[[package]]
 name = "flask-pydantic"
 version = "0.11.0"
 requires_python = ">=3.6"
@@ -302,7 +312,7 @@ dependencies = [
 lock_version = "4.2"
 cross_platform = true
 groups = ["default", "dev"]
-content_hash = "sha256:d470c4d37cd7e7a744a0c3524feef4c43bcab6f3d8265f0f75e80321a6c71ee7"
+content_hash = "sha256:4f97e9b8653d6d6adbe8696b206bda3e25781ec45e6213f3b29b8ecc1b22287f"
 
 [metadata.files]
 "black 23.3.0" = [
@@ -370,6 +380,10 @@ content_hash = "sha256:d470c4d37cd7e7a744a0c3524feef4c43bcab6f3d8265f0f75e80321a
 "flask 2.3.2" = [
     {url = "https://files.pythonhosted.org/packages/4d/00/ef81c18da32fdfcde6381c315f4b11597fb6691180a330418848efee0ae7/Flask-2.3.2.tar.gz", hash = "sha256:8c2f9abd47a9e8df7f0c3f091ce9497d011dc3b31effcf4c85a6e2b50f4114ef"},
     {url = "https://files.pythonhosted.org/packages/fa/1a/f191d32818e5cd985bdd3f47a6e4f525e2db1ce5e8150045ca0c31813686/Flask-2.3.2-py3-none-any.whl", hash = "sha256:77fd4e1249d8c9923de34907236b747ced06e5467ecac1a7bb7115ae0e9670b0"},
+]
+"flask-login 0.6.2" = [
+    {url = "https://files.pythonhosted.org/packages/a6/94/01b658bef1863a07f4738a322cce87d97be4362645255dc1182f7f5c075a/Flask_Login-0.6.2-py3-none-any.whl", hash = "sha256:1ef79843f5eddd0f143c2cd994c1b05ac83c0401dc6234c143495af9a939613f"},
+    {url = "https://files.pythonhosted.org/packages/cc/da/eae45ba9ec58af45b46ef94c6ca04fb211ee57c06421b696e894eb11b064/Flask-Login-0.6.2.tar.gz", hash = "sha256:c0a7baa9fdc448cdd3dd6f0939df72eec5177b2f7abe6cb82fc934d29caac9c3"},
 ]
 "flask-pydantic 0.11.0" = [
     {url = "https://files.pythonhosted.org/packages/9d/6d/9e58e9b7151a64197850c643d5587e4be09208fdd57492dcfd61a7c06468/Flask_Pydantic-0.11.0-py3-none-any.whl", hash = "sha256:c5a6283d1227631683ceb72a41f652036829476fbb6e7b6ccef8cae8ed51ebab"},

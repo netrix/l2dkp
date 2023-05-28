@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from flask_login import UserMixin
 from sqlalchemy.orm import Mapped
 
 from .extensions import db
@@ -68,3 +69,14 @@ class Raid(db.Model):
     drops: Mapped[list[Item]] = db.relationship(
         secondary=item_raid_association_table, back_populates="raids"
     )
+
+
+# *** USER ***
+
+
+class User(UserMixin, db.Model):
+    __tablename__ = "user"
+
+    id = db.Column(db.Integer, primary_key=True)
+    login = db.Column(db.String(64), unique=True, nullable=False)
+    password = db.Column(db.String(64), nullable=False)

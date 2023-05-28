@@ -2,9 +2,11 @@ import pathlib
 from typing import Any, Type
 
 from flask import Flask, make_response, request
+from flask_login import LoginManager
 
 from .config import Config
 from .extensions import db
+from .models import User  # TODO move it out of here
 from .routers.v1 import blueprint as v1_blueprint
 
 
@@ -49,6 +51,14 @@ def create_app(config_class: Type[Any] = Config) -> Flask:
 
     # Extensions
     db.init_app(app)
+
+    login_manager = LoginManager()
+    login_manager.init_app(app)
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        # since the user_id is just the primary key of our user table, use it in the query for the user
+        return User.query.get(int(user_id))
 
     # Blueprints
     app.register_blueprint(v1_blueprint, url_prefix="/api/v1")

@@ -5,9 +5,11 @@ BASE_DIR = pathlib.Path(__file__).parent
 SQLITE_DB_PATH = BASE_DIR / "local.db"
 SQLITE_DB_URI = f"sqlite:///{SQLITE_DB_PATH.as_posix()}"
 
+DEV_SECRET_KEY = "OLABOGA_DEV_SECRET_KEY"
+
 
 class Config:
-    SECRET_KEY = os.environ.get("SECRET_KEY")
+    SECRET_KEY = os.environ.get("SECRET_KEY") or DEV_SECRET_KEY
     SQLALCHEMY_DATABASE_URI = (
         os.environ.get("DATABASE_URI") or SQLITE_DB_URI
     )  # TODO use mysql for production.
