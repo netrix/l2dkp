@@ -17,7 +17,7 @@ import { useFormik } from 'formik';
 
 const theme = createTheme();
 
-export default function SignIn() {
+export default function LogIn() {
   const formik = useFormik({
     initialValues: {
       login: '',
@@ -89,7 +89,7 @@ export default function SignIn() {
                 <Link // TODO change font..., justify to right
                   // href="#"
                   // variant="body2"
-                  href={"/auth/signup"}
+                  href={"/auth/register"}
                   passHref
                   legacyBehavior
                 >

@@ -17,7 +17,7 @@ import { useFormik } from 'formik';
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-export default function SignUp() {
+export default function Register() {
   const formik = useFormik({
     initialValues: {
       login: '',
@@ -97,7 +97,7 @@ export default function SignUp() {
                 <Link // TODO change font..., justify to right
                   // href="#"
                   // variant="body2"
-                  href={"/auth/signin"}
+                  href={"/auth/login"} // TODO move links to separate module
                   passHref
                   legacyBehavior
                 >

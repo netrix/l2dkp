@@ -53,7 +53,7 @@ export default function Menu() {
             <List>
                 <ListItem key={"login"} disablePadding>
                     <Link
-                        href={"/auth/signin"}
+                        href={"/auth/login"}
                         passHref
                         legacyBehavior
                     >
