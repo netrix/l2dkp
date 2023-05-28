@@ -4,12 +4,12 @@ from flask import Blueprint
 from flask_pydantic import validate
 from pydantic import BaseModel, Field, validator
 
-from ..extensions import db
-from ..models import Item as DbItem
-from ..models import Person as DbPerson
-from ..models import Raid as DbRaidInfo
+from l2dkp.app.extensions import db
+from l2dkp.app.models import Item as DbItem
+from l2dkp.app.models import Person as DbPerson
+from l2dkp.app.models import Raid as DbRaidInfo
 
-blueprint = Blueprint("v1", __name__)
+blueprint = Blueprint("raids_v1", __name__)
 
 
 class RaidInfo(BaseModel):
@@ -42,14 +42,14 @@ class RaidsResponse(BaseModel):
         return cls(raids=[RaidInfo.from_db_raid(raid_info) for raid_info in raids])
 
 
-@blueprint.route("/raids")
+@blueprint.route("/")
 @validate()
 def get_raids() -> RaidsResponse:
     raids = DbRaidInfo.query.all()
     return RaidsResponse.from_db_raids(raids)
 
 
-@blueprint.route("/raids", methods=["POST"])
+@blueprint.route("/", methods=["POST"])
 @validate()
 def add_raid(body: RaidInfo) -> None:
     new_raid = DbRaidInfo(

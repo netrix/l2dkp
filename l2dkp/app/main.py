@@ -7,7 +7,7 @@ from flask_login import LoginManager
 from .config import Config
 from .extensions import db
 from .models import User  # TODO move it out of here
-from .routers.v1 import blueprint as v1_blueprint
+from .routers.raids.v1 import blueprint as raids_v1_blueprint
 
 
 # TODO Flask automatically detects this method as an entrypoint
@@ -61,7 +61,7 @@ def create_app(config_class: Type[Any] = Config) -> Flask:
         return User.query.get(int(user_id))
 
     # Blueprints
-    app.register_blueprint(v1_blueprint, url_prefix="/api/v1")
+    app.register_blueprint(raids_v1_blueprint, url_prefix="/api/raids/v1")
 
     return app
 

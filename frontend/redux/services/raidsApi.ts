@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-const BASE_URL = process.env.NODE_ENV == "development" ? "http://127.0.0.1:5000/api/v1" : "/api/v1"
+const BASE_URL = process.env.NODE_ENV == "development" ? "http://127.0.0.1:5000/api" : "/api"
 
 type Raid = {
   name: string;
@@ -22,13 +22,13 @@ export const raidsApi = createApi({
   tagTypes: ["Raid"],
   endpoints: (builder) => ({
     getRaids: builder.query<Raid[], null>({
-      query: () => "raids",
+      query: () => "raids/v1",
       transformResponse: (response: RaidsResponse) => response.raids,
       providesTags: ["Raid"],
     }),
     addNewRaid: builder.mutation({
         query: (payload) => ({
-            url: 'raids',
+            url: 'raids/v1',
             method: "POST",
             body: payload,
             header: {
