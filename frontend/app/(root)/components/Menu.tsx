@@ -9,16 +9,65 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
-import Link from 'next/link';
+// import Link from 'next/link';
+import { useRouter } from "next/navigation";
+import ProtectedLink from '@/app/components/ProtectedLink';
+import { loginPageUri } from '@/app/components/RouteGuard'; // TODO use some selector or sth
 
 
-import { setAuthState } from "@/redux/features/authSlice";
+import { logoutUser } from '@/redux/actions/auth';
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+
+
+function LoggedOutMenuElements() {
+    return (
+        <List>
+            <ListItem key={"login"} disablePadding>
+                <ProtectedLink
+                    href={"/auth/signin"}
+                    passHref
+                    legacyBehavior
+                >
+                    <ListItemButton>
+                        <ListItemIcon>
+                            <InboxIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Log in" />
+                    </ListItemButton>
+                </ProtectedLink>
+            </ListItem>
+        </List>
+    );
+}
+
+
+function LoggedInMenuElements() {
+    const dispatch = useAppDispatch();
+    const router = useRouter();
+
+    return (
+        <List>
+            {/* TODO add profile button */}
+            <ListItem key={"logout"} disablePadding>
+                <ListItemButton
+                    onClick={() => {
+                        dispatch(logoutUser({}));
+                        router.push(loginPageUri);
+                    }}
+                >
+                    <ListItemIcon>
+                        <InboxIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Log out" />
+                </ListItemButton>
+            </ListItem>
+        </List>
+    );
+}
 
 
 export default function Menu() {
     const isAuthenticated = useAppSelector((state) => state.authSliceReducer.authState);
-    const dispatch = useAppDispatch();
 
     return (
         <>
@@ -34,7 +83,7 @@ export default function Menu() {
                 }
             ].map(({title, link}, index) => (
                 <ListItem key={title} disablePadding>
-                    <Link
+                    <ProtectedLink
                         href={link}
                         passHref
                         legacyBehavior
@@ -45,31 +94,16 @@ export default function Menu() {
                             </ListItemIcon>
                             <ListItemText primary={title} />
                         </ListItemButton>
-                    </Link>
+                    </ProtectedLink>
                 </ListItem>
             ))}
             </List>
             <Divider />
-            <List>
-                <ListItem key={"login"} disablePadding>
-                    <Link
-                        href={"/auth/login"}
-                        passHref
-                        legacyBehavior
-                    >
-                        <ListItemButton
-                            // onClick={() => dispatch(setAuthState(!isAuthenticated))}
-                            // onClick={useRouter.replace("/auth")}
-                        >
-                            <ListItemIcon>
-                            <InboxIcon />
-                            </ListItemIcon>
-                            {/* TODO change to 2 buttons - "Profile" and "Log out" when authenticated */}
-                            <ListItemText primary={isAuthenticated ? "Log out" : "Log in"} />
-                        </ListItemButton>
-                    </Link>
-                </ListItem>
-            </List>
+            {
+                isAuthenticated
+                ? <LoggedInMenuElements />
+                : <LoggedOutMenuElements />
+            }
         </>
     )
 }

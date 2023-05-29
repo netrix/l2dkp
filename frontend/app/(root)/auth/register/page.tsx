@@ -10,6 +10,9 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useFormik } from 'formik';
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { signUpUser } from '@/redux/actions/auth';
+import { useRouter } from "next/navigation";
 
 
 // BASED ON: https://github.com/mui/material-ui/blob/v5.13.2/docs/data/material/getting-started/templates/sign-up/SignUp.tsx
@@ -17,7 +20,21 @@ import { useFormik } from 'formik';
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
+
 export default function Register() {
+
+  const { loading, error, success } = useAppSelector((state) => state.authSliceReducer);
+  const router = useRouter();
+
+  const dispatch = useAppDispatch();
+
+  React.useEffect(() => {
+    // Redirect to Raids
+    if (success) {
+      router.push("/raids")
+    }
+  }, [router, success]);
+
   const formik = useFormik({
     initialValues: {
       login: '',
@@ -25,7 +42,12 @@ export default function Register() {
       confirmPassword: '',
     },
     onSubmit: values => {
-      alert(JSON.stringify(values, null, 2));
+      if (values.password === values.confirmPassword) {
+        dispatch(signUpUser({login: values.login, password: values.password}));
+      } else {
+        alert("passwords does not match")
+      }
+
     },
   });
 
@@ -91,6 +113,7 @@ export default function Register() {
               sx={{ mt: 3, mb: 2 }}
             >
               Sign Up
+              {/* {loading ? <Spinner /> : 'Register'}  TODO add spinner */}
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>

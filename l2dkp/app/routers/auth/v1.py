@@ -51,3 +51,10 @@ def signup(body: SignupBody) -> Response:
 def logout():
     logout_user()
     return {}
+
+
+@blueprint.route("/check")
+@login_required
+def check_session() -> Response:
+    """Used to check if session is valid"""
+    return {}

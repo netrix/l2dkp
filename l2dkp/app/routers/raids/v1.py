@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from flask import Blueprint
+from flask_login import login_required
 from flask_pydantic import validate
 
 from l2dkp.app.extensions import db
@@ -22,6 +23,7 @@ def get_raids() -> RaidsResponse:
 
 @blueprint.route("/", methods=["POST"])
 @validate()
+@login_required
 def add_raid(body: RaidInfo) -> None:
     new_raid = DbRaidInfo(
         name=body.name,

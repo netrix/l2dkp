@@ -11,6 +11,10 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useFormik } from 'formik';
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { setAuthState } from "@/redux/features/authSlice";
+import { useRouter } from "next/navigation";
+import { loginUser } from '@/redux/actions/auth';
 
 // BASED ON: https://github.com/mui/material-ui/blob/v5.8.7/docs/data/material/getting-started/templates/sign-in/SignIn.tsx
 
@@ -18,15 +22,26 @@ import { useFormik } from 'formik';
 const theme = createTheme();
 
 export default function LogIn() {
+  const router = useRouter();
+  const { loading, error, success, authState } = useAppSelector((state) => state.authSliceReducer);
+  const dispatch = useAppDispatch();
+
   const formik = useFormik({
     initialValues: {
       login: '',
       password: '',
     },
     onSubmit: values => {
-      alert(JSON.stringify(values, null, 2));
+      dispatch(loginUser({login: values.login, password: values.password}));
     },
   });
+
+  React.useEffect(() => {
+    // Redirect to Raids, should redirect to requested page or user profile after login
+    if (authState) {
+      router.push("/raids")
+    }
+  }, [router, authState]);
 
 
   return (
