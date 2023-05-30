@@ -24,7 +24,7 @@ function LoggedOutMenuElements() {
         <List>
             <ListItem key={"login"} disablePadding>
                 <ProtectedLink
-                    href={"/auth/signin"}
+                    href={"/auth/login"}
                     passHref
                     legacyBehavior
                 >
