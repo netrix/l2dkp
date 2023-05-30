@@ -38,10 +38,9 @@ export default function RouteGuard({ children }: {children: any}) {
 
         // // on route change start - hide page content by setting authorized to false
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [pathname, searchParams, isInitialized]);
+    }, [pathname, searchParams, isInitialized, isAuthenticated]);
 
     function authCheck(url: string) {
-        console.log("CHECK", pathname, searchParams, authorized)
         // redirect to login page if accessing a private page and not logged in
         const relativePath = pathname.slice(basePath.length);
         if (!isAuthenticated && !publicPaths.includes(relativePath)) {      // TODO check if logged in and don't go to signup / register

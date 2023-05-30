@@ -12,8 +12,6 @@ import MailIcon from '@mui/icons-material/Mail';
 // import Link from 'next/link';
 import { useRouter } from "next/navigation";
 import ProtectedLink from '@/app/components/ProtectedLink';
-import { loginPageUri } from '@/app/components/RouteGuard'; // TODO use some selector or sth
-
 
 import { logoutUser } from '@/redux/actions/auth';
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
@@ -52,7 +50,6 @@ function LoggedInMenuElements() {
                 <ListItemButton
                     onClick={() => {
                         dispatch(logoutUser({}));
-                        router.push(loginPageUri);
                     }}
                 >
                     <ListItemIcon>
