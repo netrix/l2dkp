@@ -20,6 +20,7 @@ export default function ProtectedLink({children, ...props}: any) {
 
 
     const relativePath = pathname.slice(basePath.length);   // TODO make function out of this line
+    console.log("DUPA", relativePath, publicPaths, publicPaths.includes(relativePath));
     if (publicPaths.includes(relativePath)) {
         return (
             <>

@@ -51,8 +51,8 @@ function LoggedInMenuElements() {
             <ListItem key={"logout"} disablePadding>
                 <ListItemButton
                     onClick={() => {
-                        dispatch(logoutUser({}));
                         router.push(loginPageUri);
+                        dispatch(logoutUser({}));
                     }}
                 >
                     <ListItemIcon>
