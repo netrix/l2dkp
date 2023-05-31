@@ -31,6 +31,7 @@ export default function Register() {
   React.useEffect(() => {
     // Redirect to Raids
     if (success) {
+      console.log("WTF", success);
       router.push("/raids")
     }
   }, [router, success]);
