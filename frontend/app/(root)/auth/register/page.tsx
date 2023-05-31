@@ -23,18 +23,18 @@ const defaultTheme = createTheme();
 
 export default function Register() {
 
-  const { loading, error, success } = useAppSelector((state) => state.authSliceReducer);
+  const { loading, error, success, authState } = useAppSelector((state) => state.authSliceReducer);
   const router = useRouter();
 
   const dispatch = useAppDispatch();
 
   React.useEffect(() => {
     // Redirect to Raids
-    if (success) {
-      console.log("WTF", success);
+    if (authState) {
+      // console.log("WTF", success);
       router.push("/raids")
     }
-  }, [router, success]);
+  }, [router, authState]);
 
   const formik = useFormik({
     initialValues: {
