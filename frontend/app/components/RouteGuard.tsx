@@ -45,9 +45,11 @@ export default function RouteGuard({ children }: {children: any}) {
         const relativePath = pathname.slice(basePath.length);
         console.log("CHECK", relativePath, publicPaths, authorized, publicPaths.includes(relativePath));
         if (!isAuthenticated && !publicPaths.includes(relativePath)) {      // TODO check if logged in and don't go to signup / register
+            console.log("FIRST GATE", !isAuthenticated, !publicPaths.includes(relativePath));
             setAuthorized(false);
             router.push(loginPageUri);
         } else {
+            console.log("SECOND GATE");
             setAuthorized(true);
         }
     }
