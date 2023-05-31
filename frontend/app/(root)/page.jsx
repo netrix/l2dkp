@@ -10,8 +10,10 @@ export default function Home() {
 
     useEffect(() => {
         if (isAuthenticated) {
+            console.log("MAIN FIRST");
             router.replace("/raids");
         } else {
+            console.log("MAIN SECOND");
             router.replace("/auth/login");
         }
     })
