@@ -13,9 +13,10 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import ReadOnlyRow from "./components/ReadOnlyRow";
-import { useGetRaidsQuery, useAddNewRaidMutation } from '@/redux/services/raidsApi';
+import { useGetRaidsQuery, useAddNewRaidMutation, useRefreshRaidsMutation } from '@/redux/services/raidsApi';
 import EditableRow from "./components/EditableRow";
 import {RaidInfo} from "./components/types";
+import RefreshIcon from '@mui/icons-material/Refresh';
 
 const theme = createTheme({
   components: {
@@ -33,33 +34,53 @@ const theme = createTheme({
 interface RaidsPageHeaderProps {
     showAddButton: boolean;
     onAddButtonClick: () => void;
+    onRefreshButtonClick: () => void;
 }
 
 
-function RaidsPageHeader({showAddButton, onAddButtonClick}: RaidsPageHeaderProps) {
+function RaidsPageHeader({showAddButton, onAddButtonClick, onRefreshButtonClick}: RaidsPageHeaderProps) {
   return (
     <Box
       sx={{
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        padding: 2,
+        alignContent: "center",
+        padding: 1,
       }}
     >
       <Typography variant="h6" gutterBottom component="div">
           Raids
       </Typography>
-      {
-        showAddButton &&
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'right',
+        }}
+      >
         <Button
           variant="contained"
-          color="primary"
-          startIcon={<AddIcon />}
-          onClick={onAddButtonClick}
+          color="secondary"
+          onClick={onRefreshButtonClick}
+          sx={{
+            marginRight: 1
+          }}
         >
-            Add
+            <RefreshIcon />
         </Button>
-      }
+        {
+          showAddButton &&
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<AddIcon />}
+            onClick={onAddButtonClick}
+          >
+              Add
+          </Button>
+        }
+      </div>
     </Box>
   )
 }
@@ -133,6 +154,7 @@ function RaidsTableBodyLoading() {
 export default function Home() {
   const [isAddMode, setAddMode] = React.useState(false);
   const [addNewRaid, response] = useAddNewRaidMutation();
+  const [refreshRaids, refreshResponse] = useRefreshRaidsMutation();
 
   const { isLoading, isFetching, data, error } = useGetRaidsQuery(null);
 
@@ -146,6 +168,7 @@ export default function Home() {
     setAddMode(false);
   }
 
+  // TODO don't remove entire table when fetching..., update only  content...
   return (
     <Paper
       elevation={1}
@@ -156,6 +179,7 @@ export default function Home() {
       <RaidsPageHeader
         showAddButton={!isAddMode && !isLoading && !isLoading && !error}
         onAddButtonClick={() => setAddMode(true)}
+        onRefreshButtonClick={() => refreshRaids(null)}
       />
       <TableContainer component={Paper}>
         <Table aria-label="collapsible table">

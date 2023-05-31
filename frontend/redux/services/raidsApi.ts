@@ -15,7 +15,7 @@ type RaidsResponse = {
 
 export const raidsApi = createApi({
   reducerPath: "raidsApi",
-  refetchOnFocus: true,
+  refetchOnFocus: false,
   baseQuery: fetchBaseQuery({
     baseUrl: BASE_URL,
   }),
@@ -37,7 +37,12 @@ export const raidsApi = createApi({
         }),
         invalidatesTags: ["Raid"],
     }),
+    refreshRaids: builder.mutation({
+      query: () => "raids/v1",
+      transformResponse: (response: RaidsResponse) => response.raids,
+      invalidatesTags: ["Raid"],
+    }),
   }),
 });
 
-export const { useGetRaidsQuery, useAddNewRaidMutation } = raidsApi;
+export const { useGetRaidsQuery, useAddNewRaidMutation, useRefreshRaidsMutation } = raidsApi;
