@@ -41,9 +41,9 @@ export default function RouteGuard({ children }: {children: any}) {
     }, [pathname, searchParams, isInitialized, isAuthenticated]);
 
     function authCheck(url: string) {
-        console.log("CHECK", pathname, searchParams, authorized)
         // redirect to login page if accessing a private page and not logged in
         const relativePath = pathname.slice(basePath.length);
+        console.log("CHECK", relativePath, publicPaths, authorized, publicPaths.includes(relativePath));
         if (!isAuthenticated && !publicPaths.includes(relativePath)) {      // TODO check if logged in and don't go to signup / register
             setAuthorized(false);
             router.push(loginPageUri);
