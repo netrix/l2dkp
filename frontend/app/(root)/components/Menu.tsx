@@ -51,8 +51,8 @@ function LoggedInMenuElements() {
             <ListItem key={"logout"} disablePadding>
                 <ListItemButton
                     onClick={() => {
-                        router.push(loginPageUri);
                         dispatch(logoutUser({}));
+                        // router.push(loginPageUri);  // TODO comment out and check if redirects... there is some race.. should change page after dispatch is complete
                     }}
                 >
                     <ListItemIcon>
