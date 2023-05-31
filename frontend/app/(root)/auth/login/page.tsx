@@ -38,6 +38,7 @@ export default function LogIn() {
 
   React.useEffect(() => {
     // Redirect to Raids, should redirect to requested page or user profile after login
+    console.log("LOGIN EFFECT", router, authState);
     if (authState) {
       router.push("/raids")
     }
