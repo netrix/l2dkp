@@ -9,6 +9,7 @@ from .extensions import db
 from .models import User  # TODO move it out of here
 from .routers.auth.v1 import blueprint as auth_v1_blueprint
 from .routers.raids.v1 import blueprint as raids_v1_blueprint
+from .routers.members.v1 import blueprint as members_v1_blueprint
 
 
 # TODO Flask automatically detects this method as an entrypoint
@@ -64,6 +65,7 @@ def create_app(config_class: Type[Any] = Config) -> Flask:
     # Blueprints
     app.register_blueprint(raids_v1_blueprint, url_prefix="/api/raids/v1")
     app.register_blueprint(auth_v1_blueprint, url_prefix="/api/auth/v1")
+    app.register_blueprint(members_v1_blueprint, url_prefix="/api/members/v1")
 
     return app
 
