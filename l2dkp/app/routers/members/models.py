@@ -4,7 +4,9 @@ from l2dkp.app.models import Person as DbPersonInfo
 
 
 class PersonInfo(BaseModel):
-    name: str = Field(..., description="Main nickname.")      # TODO set min length (map to People in RaidsInfo)
+    name: str = Field(
+        ..., description="Main nickname."
+    )  # TODO set min length (map to People in RaidsInfo)
     num_raids: int = Field(..., description="Number of Raids person was involved into.")
 
     @classmethod

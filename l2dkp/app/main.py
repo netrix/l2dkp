@@ -8,8 +8,8 @@ from .config import Config
 from .extensions import db
 from .models import User  # TODO move it out of here
 from .routers.auth.v1 import blueprint as auth_v1_blueprint
-from .routers.raids.v1 import blueprint as raids_v1_blueprint
 from .routers.members.v1 import blueprint as members_v1_blueprint
+from .routers.raids.v1 import blueprint as raids_v1_blueprint
 
 
 # TODO Flask automatically detects this method as an entrypoint
