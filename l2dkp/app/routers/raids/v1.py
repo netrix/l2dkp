@@ -25,14 +25,20 @@ def get_raids() -> RaidsResponse:
 @validate()
 @login_required
 def add_raid(body: RaidInfo) -> None:
+    available_people = [result[0] for result in db.session.execute(db.select(DbPerson).filter(DbPerson.name.in_(body.people))).all()]
+    exclude_from_new = [entity.name for entity in available_people]
+    new_people = [DbPerson(name=name) for name in body.people if name not in exclude_from_new]
+    final_list = available_people + new_people
+
     new_raid = DbRaidInfo(
         name=body.name,
         date=datetime.fromisoformat(body.date),
-        people=[DbPerson(name=name) for name in body.people],
+        people=final_list,
         drops=[DbItem(name=name) for name in body.drops],
     )
 
     db.session.add(new_raid)
     db.session.commit()
-    print(body)
     return {}
+
+
