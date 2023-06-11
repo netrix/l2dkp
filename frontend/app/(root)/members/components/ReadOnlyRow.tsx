@@ -9,18 +9,23 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import {MemberInfo} from "./types";
+import {MemberInfo, RaidInfo} from "./types";
 
 
 export default function ReadOnlyRow({memberInfo}: { memberInfo: MemberInfo }) {
     const [open, setOpen] = React.useState(false);
 
+    const raids = [...memberInfo.raids].sort((first: RaidInfo, second: RaidInfo) => first.date.localeCompare(second.date));
+    const lastRaid = raids.slice(-1)[0];
+
+    // TODO print only date, not datetime
+
     return (
       <React.Fragment>
         <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
           <TableCell align="left">{memberInfo.name}</TableCell>
-          <TableCell align="right">{memberInfo.num_raids}</TableCell>
-          <TableCell align="right">{"last_raid_placeholder"}</TableCell>
+          <TableCell align="right">{memberInfo.raids.length}</TableCell>
+          <TableCell align="right">{`${lastRaid.name} (${lastRaid.date})`}</TableCell>
           <TableCell>
             <IconButton
               aria-label="expand row"
@@ -39,7 +44,7 @@ export default function ReadOnlyRow({memberInfo}: { memberInfo: MemberInfo }) {
                   Raids
                 </Typography>
                 <List>
-                  {/* {raidInfo.drops.map((drop) => (<ListItem key={drop}>{drop}</ListItem>))} */}
+                  {raids.map((raid) => (<ListItem key={raid.id}>{raid.name} - {raid.date}</ListItem>))}
                 </List>
                 <Typography variant="h6" gutterBottom component="div">
                   Aliases

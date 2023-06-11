@@ -2,9 +2,15 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const BASE_URL = process.env.NODE_ENV == "development" ? "http://127.0.0.1:5000/api" : "/api"
 
+type RaidInfo = {
+  id: string;
+  name: string;
+  date: string;
+}
+
 type Member = {
   name: string;
-  num_raids: number;
+  raids: Array<RaidInfo>;
 };
 
 type MembersResponse = {

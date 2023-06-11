@@ -1,6 +1,10 @@
+export interface RaidInfo {
+    id: string;
+    name: string;
+    date: string;
+  }
 
-
-export interface MemberInfo {
-    name: string;   // TODO add list of Raids (with ids) here too and name aliases
-    num_raids: number;
-}
+export interface MemberInfo {    // must conform to type redux service
+    name: string;
+    raids: Array<RaidInfo>;
+  };
